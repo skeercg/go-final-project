@@ -34,13 +34,15 @@ func (c *Controller) InitRoutes() *mux.Router {
 
 	items.HandleFunc("/{id}", c.deleteItemById).Methods("DELETE")
 
+	items.HandleFunc("/grade/{id}", c.gradeItem).Methods("POST")
+
 	items.HandleFunc("", c.createItem).Methods("POST")
 
 	items.HandleFunc("/{id}", c.updateItemById).Methods("PUT")
 
-	items.HandleFunc("/sort/rating", c.FilterbyRating).Methods("POST")
-	
-	items.HandleFunc("/sort/price", c.FilterbyPrice).Methods("POST")
+	items.HandleFunc("/sort/rating", c.FilterByRating).Methods("POST")
+
+	items.HandleFunc("/sort/price", c.FilterByPrice).Methods("POST")
 
 	return router
 }

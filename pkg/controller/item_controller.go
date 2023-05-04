@@ -11,10 +11,35 @@ import (
 
 type searchParams struct {
 	Name string `json:"name" binding:"required"`
-	Sort  string `json:"sort" binding:"required"`
+	Sort string `json:"sort" binding:"required"`
 }
+
 type filterParams struct {
-	Sort  string `json:"sort" binding:"required"`
+	Sort string `json:"sort" binding:"required"`
+}
+
+type gradeParams struct {
+	Rating float32 `json:"rating"`
+}
+
+func (c *Controller) gradeItem(w http.ResponseWriter, r *http.Request) {
+	var params gradeParams
+	err := json.NewDecoder(r.Body).Decode(&params)
+
+	if err != nil || params.Rating > 5.0 {
+		w.WriteHeader(400)
+		return
+	}
+
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+
+	err = c.services.Items.Grade(id, params.Rating)
+
+	if err != nil {
+		w.WriteHeader(500)
+		return
+	}
 }
 
 func (c *Controller) getItems(w http.ResponseWriter, r *http.Request) {
@@ -106,12 +131,11 @@ func (c *Controller) updateItemById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
-func (c *Controller) FilterbyRating(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) FilterByRating(w http.ResponseWriter, r *http.Request) {
 	var params filterParams
 	err := json.NewDecoder(r.Body).Decode(&params)
 
-	items, err := c.services.Items.FilterbyRating(params.Sort)
+	items, err := c.services.Items.FilterByRating(params.Sort)
 	if err != nil {
 		log.Print(err)
 	}
@@ -119,11 +143,11 @@ func (c *Controller) FilterbyRating(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(items)
 }
 
-func (c *Controller) FilterbyPrice(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) FilterByPrice(w http.ResponseWriter, r *http.Request) {
 	var params filterParams
 	err := json.NewDecoder(r.Body).Decode(&params)
 
-	items, err := c.services.Items.FilterbyPrice(params.Sort)
+	items, err := c.services.Items.FilterByPrice(params.Sort)
 	if err != nil {
 		log.Print(err)
 	}

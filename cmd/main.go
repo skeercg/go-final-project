@@ -12,7 +12,7 @@ import (
 
 func main() {
 	if err := initConfig(); err != nil {
-		log.Fatalf("error initializing configs: %s", err.Error())
+		log.Fatalf("error initializing config: %s", err.Error())
 	}
 
 	db, err := repository.NewPostgresDB(repository.Config{

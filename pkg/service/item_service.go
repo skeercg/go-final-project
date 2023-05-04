@@ -13,6 +13,12 @@ func NewItemService(repo repository.Items) *ItemService {
 	return &ItemService{repo: repo}
 }
 
+func (r *ItemService) Grade(id int, grade float32) error {
+	err := r.repo.Grade(id, grade)
+
+	return err
+}
+
 func (r *ItemService) Create(Item model.Item) error {
 	err := r.repo.Create(Item)
 
@@ -49,14 +55,14 @@ func (r *ItemService) GiveRatingById(rating float32, id int) error {
 	return err
 }
 
-func (r *ItemService) FilterbyRating(sort string) ([]model.Item, error) {
-	Items, err := r.repo.FilterbyRating(sort)
+func (r *ItemService) FilterByRating(sort string) ([]model.Item, error) {
+	Items, err := r.repo.FilterByRating(sort)
 
 	return Items, err
 }
 
-func (r *ItemService) FilterbyPrice(sort string) ([]model.Item, error) {
-	Items, err := r.repo.FilterbyPrice(sort)
+func (r *ItemService) FilterByPrice(sort string) ([]model.Item, error) {
+	Items, err := r.repo.FilterByPrice(sort)
 
 	return Items, err
 }

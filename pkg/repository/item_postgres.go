@@ -13,6 +13,27 @@ func NewItemPostgres(db *gorm.DB) *ItemPostgres {
 	return &ItemPostgres{db: db}
 }
 
+func (r *ItemPostgres) Grade(id int, grade float32) error {
+	var oldItem model.Item
+
+	result := r.db.First(&oldItem, id)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	oldItem.RatingCount += 1
+	oldItem.RatingTotal += grade
+
+	result = r.db.Save(&oldItem)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
 func (r *ItemPostgres) Create(item model.Item) error {
 	r.db.Create(&item)
 
@@ -56,19 +77,18 @@ func (r *ItemPostgres) Delete(id int) error {
 }
 
 func (r *ItemPostgres) Update(item model.Item, id int) error {
-	var olditem model.Item
+	var oldItem model.Item
 
-	result := r.db.First(&olditem, id)
+	result := r.db.First(&oldItem, id)
 
 	if result.Error != nil {
 		return result.Error
 	}
 
-	olditem.Name = item.Name
-	olditem.Rating = item.Rating
-	olditem.Price = item.Price
+	oldItem.Name = item.Name
+	oldItem.Price = item.Price
 
-	result = r.db.Save(&olditem)
+	result = r.db.Save(&oldItem)
 
 	if result.Error != nil {
 		return result.Error
@@ -97,7 +117,7 @@ func (r *ItemPostgres) GiveRatingById(rating float32, id int) error {
 	return nil
 }
 
-func (r *ItemPostgres) FilterbyRating(sort string) ([]model.Item, error) {
+func (r *ItemPostgres) FilterByRating(sort string) ([]model.Item, error) {
 	orderQuery := "rating " + sort
 
 	var items []model.Item
@@ -110,7 +130,7 @@ func (r *ItemPostgres) FilterbyRating(sort string) ([]model.Item, error) {
 	return items, nil
 }
 
-func (r *ItemPostgres) FilterbyPrice(sort string) ([]model.Item, error) {
+func (r *ItemPostgres) FilterByPrice(sort string) ([]model.Item, error) {
 	orderQuery := "price " + sort
 
 	var items []model.Item
