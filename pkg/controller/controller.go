@@ -15,6 +15,7 @@ func NewController(services *service.Service) *Controller {
 }
 
 func (c *Controller) InitRoutes() *mux.Router {
+
 	router := mux.NewRouter().StrictSlash(true)
 
 	auth := router.PathPrefix("/auth").Subrouter()
@@ -22,6 +23,24 @@ func (c *Controller) InitRoutes() *mux.Router {
 	auth.HandleFunc("/sign-in", c.signIn).Methods("POST")
 
 	auth.HandleFunc("/sign-up", c.signUp).Methods("POST")
+
+	items := router.PathPrefix("/items").Subrouter()
+
+	items.Use(c.userIdentity)
+
+	items.HandleFunc("", c.getItems).Methods("GET")
+
+	items.HandleFunc("/{id}", c.getItemById).Methods("GET")
+
+	items.HandleFunc("/{id}", c.deleteItemById).Methods("DELETE")
+
+	items.HandleFunc("", c.createItem).Methods("POST")
+
+	items.HandleFunc("/{id}", c.updateItemById).Methods("PUT")
+
+	items.HandleFunc("/sort/rating", c.FilterbyRating).Methods("POST")
+	
+	items.HandleFunc("/sort/price", c.FilterbyPrice).Methods("POST")
 
 	return router
 }
