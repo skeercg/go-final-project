@@ -10,18 +10,6 @@ type Authorization interface {
 	GetUser(username, password string) (*model.User, error)
 }
 
-type Repository struct {
-	Authorization
-	Items
-}
-
-func NewRepository(db *gorm.DB) *Repository {
-	return &Repository{
-		NewAuthPostgres(db),
-		NewItemPostgres(db),
-	}
-}
-
 type Items interface {
 	Grade(id int, grade float32) error
 	Create(item model.Item) error
@@ -32,4 +20,23 @@ type Items interface {
 	GiveRatingById(rating float32, id int) error
 	FilterByRating(sort string) ([]model.Item, error)
 	FilterByPrice(sort string) ([]model.Item, error)
+}
+
+type Users interface {
+	GetAccount(id int) (float32, error)
+	Withdraw(id int, amount float32) error
+}
+
+type Repository struct {
+	Authorization
+	Items
+	Users
+}
+
+func NewRepository(db *gorm.DB) *Repository {
+	return &Repository{
+		NewAuthPostgres(db),
+		NewItemPostgres(db),
+		NewUserPostgres(db),
+	}
 }

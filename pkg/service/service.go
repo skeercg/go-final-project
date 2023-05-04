@@ -11,19 +11,8 @@ type AuthService interface {
 	ParseToken(token string) (int, error)
 }
 
-type Service struct {
-	AuthService
-	Items
-}
-
-func NewService(repos *repository.Repository) *Service {
-	return &Service{
-		AuthService: NewAuthService(repos.Authorization),
-		Items:       NewItemService(repos.Items),
-	}
-}
-
 type Items interface {
+	Purchase(productId, userId int) error
 	Grade(id int, grade float32) error
 	Create(item model.Item) error
 	GetAll(name, sort string) ([]model.Item, error)
@@ -33,4 +22,16 @@ type Items interface {
 	GiveRatingById(rating float32, id int) error
 	FilterByRating(sort string) ([]model.Item, error)
 	FilterByPrice(sort string) ([]model.Item, error)
+}
+
+type Service struct {
+	AuthService
+	Items
+}
+
+func NewService(repos *repository.Repository) *Service {
+	return &Service{
+		AuthService: NewAuthService(repos.Authorization),
+		Items:       NewItemService(repos.Items, repos.Users),
+	}
 }

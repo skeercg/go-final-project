@@ -22,6 +22,25 @@ type gradeParams struct {
 	Rating float32 `json:"rating"`
 }
 
+func (c *Controller) purchaseItem(w http.ResponseWriter, r *http.Request) {
+	userId := r.Context().Value("userId").(int)
+
+	vars := mux.Vars(r)
+	productId, err := strconv.Atoi(vars["id"])
+
+	if err != nil {
+		w.WriteHeader(400)
+		return
+	}
+
+	err = c.services.Items.Purchase(productId, userId)
+
+	if err != nil {
+		w.WriteHeader(500)
+		return
+	}
+}
+
 func (c *Controller) gradeItem(w http.ResponseWriter, r *http.Request) {
 	var params gradeParams
 	err := json.NewDecoder(r.Body).Decode(&params)

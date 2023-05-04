@@ -36,6 +36,8 @@ func (c *Controller) InitRoutes() *mux.Router {
 
 	items.HandleFunc("/grade/{id}", c.gradeItem).Methods("POST")
 
+	items.HandleFunc("/purchase/{id}", c.purchaseItem).Methods("POST")
+
 	items.HandleFunc("", c.createItem).Methods("POST")
 
 	items.HandleFunc("/{id}", c.updateItemById).Methods("PUT")

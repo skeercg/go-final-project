@@ -6,11 +6,20 @@ import (
 )
 
 type ItemService struct {
-	repo repository.Items
+	repo  repository.Items
+	users repository.Users
 }
 
-func NewItemService(repo repository.Items) *ItemService {
-	return &ItemService{repo: repo}
+func NewItemService(repo repository.Items, users repository.Users) *ItemService {
+	return &ItemService{repo: repo, users: users}
+}
+
+func (r *ItemService) Purchase(productId, userId int) error {
+	item, err := r.repo.GetById(productId)
+
+	err = r.users.Withdraw(userId, item.Price)
+
+	return err
 }
 
 func (r *ItemService) Grade(id int, grade float32) error {
