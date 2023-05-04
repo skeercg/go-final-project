@@ -1,5 +1,14 @@
 package main
 
+import (
+	"github.com/spf13/viper"
+	"go-final-project/pkg/controller"
+	"go-final-project/pkg/repository"
+	"go-final-project/pkg/service"
+	"log"
+	"net/http"
+)
+
 func main() {
 	if err := initConfig(); err != nil {
 		log.Fatalf("error initializing config: %s", err.Error())
