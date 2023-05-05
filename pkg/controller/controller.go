@@ -42,9 +42,9 @@ func (c *Controller) InitRoutes() *mux.Router {
 
 	items.HandleFunc("/{id}", c.updateItemById).Methods("PUT")
 
-	items.HandleFunc("/sort/rating", c.FilterByRating).Methods("POST")
+	items.HandleFunc("/sort/rating", c.filterByRating).Methods("POST")
 
-	items.HandleFunc("/sort/price", c.FilterByPrice).Methods("POST")
+	items.HandleFunc("/sort/price", c.filterByPrice).Methods("POST")
 
 	return router
 }
