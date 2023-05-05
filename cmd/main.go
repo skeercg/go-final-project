@@ -7,6 +7,7 @@ import (
 	"go-final-project/pkg/service"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -20,7 +21,7 @@ func main() {
 		Username: viper.GetString("db.username"),
 		DBName:   viper.GetString("db.dbname"),
 		SSLMode:  viper.GetString("db.sslmode"),
-		Password: viper.GetString("db.password"),
+		Password: os.Getenv("DB_PASSWORD"),
 	})
 
 	if err != nil {
