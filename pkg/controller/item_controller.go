@@ -150,7 +150,7 @@ func (c *Controller) updateItemById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *Controller) FilterByRating(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) filterByRating(w http.ResponseWriter, r *http.Request) {
 	var params filterParams
 	err := json.NewDecoder(r.Body).Decode(&params)
 
@@ -162,7 +162,7 @@ func (c *Controller) FilterByRating(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(items)
 }
 
-func (c *Controller) FilterByPrice(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) filterByPrice(w http.ResponseWriter, r *http.Request) {
 	var params filterParams
 	err := json.NewDecoder(r.Body).Decode(&params)
 
